@@ -1,0 +1,1 @@
+{"jobName":"hub_ac","target":"hub_ac","targetOutput":"","tablist": [{"tabname": "cpbcrd","dir": "/user/cloudera/datavault/parquet/cpbcrd"}], "query": "select md5(concat(CM_ORG_NMBR,CM_TYPE,CM_CARD_NMBR)) as hub_ac, '',concat(CM_ORG_NMBR,CM_TYPE,CM_CARD_NMBR),'' from cpbcrd","partition":[]}
