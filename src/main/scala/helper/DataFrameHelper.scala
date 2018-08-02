@@ -1,5 +1,6 @@
 package helper
 import org.apache.spark.sql.types._
+import model.SourceInfo
 import org.apache.spark.rdd.RDD
 import scala.io.Source
 import scala.collection.mutable.WrappedArray
@@ -12,13 +13,10 @@ import org.apache.spark.sql.DataFrame
 import org.apache.hadoop.io.{IntWritable, Text}
 import scala.util.{Try, Success, Failure}
 import model.ColumnMapping
-import model.ConfigFile
+import model.{ConfigFile, ConfigFileV3}
 import model.ArgumentGlobal
 object DataFrameHelper {
-  private val outputLogger = new OutputLogger
-  
-  def getOutputCount = outputLogger.getRecordCount
-  
+
   def generateSchemaFromAvro(location: String): StructType = {
     val fieldColName = "fields"
     val nameCol = "name"
@@ -39,7 +37,7 @@ object DataFrameHelper {
           DataManipulator.matchDataTypeInAvro(dataType.apply(1)), 
           true
         )
-      }):::List(StructField(fileNameCol, org.apache.spark.sql.types.StringType, true))
+      })//:::List(StructField(fileNameCol, org.apache.spark.sql.types.StringType, true))
       
     )
     schema
@@ -114,15 +112,19 @@ object DataFrameHelper {
     
   }
   
-  def registerAllTables(listFileLocation: String, schemaLocation: String, delimiter: String, configFile: ConfigFile, cdrType: String) {
-    
+  def registerAllTables(listFileLocation: String, schemaLocation: String, delimiter: String, source: SourceInfo, cdrType: String) {
     generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType)
-    .registerTempTable(configFile.tableList().baseTableInfo.name())
+    .registerTempTable(source.name)
   }
+  
+  def registerAllTables(CSVLocation: String, schemaLocation: String, source: SourceInfo) {
+    generateDataFrameFromCSV(CSVLocation, schemaLocation, ",").registerTempTable(source.name)
+  }
+  
   
   def generateOutput(fileName: String, configFile: ConfigFile) = {
      ContextHelper
-    .getHiveContext.sql(configFile.selectQuery()).repartition(1).write.mode("append").parquet(fileName)
+    .getHiveContext.sql(configFile.selectQuery()).repartition(DataManipulator.getTotalCoresTask()).write.mode("append").parquet(fileName)
   }
   
   def readListFile(loc: String, cdrType: String):List[String] = {
@@ -132,34 +134,29 @@ object DataFrameHelper {
   
   def generateRDDRows(seqFiles:List[String], delimiter: String): RDD[Row] = {
     val seqList = seqFiles.flatMap(seqFileLoc => {
-         val seq = ContextHelper.getSparkContext.sequenceFile(seqFileLoc, classOf[IntWritable], classOf[Text], DataManipulator.getTotalCoresTask.toInt)
-         .map(data => data._2.toString())
-         seq.collect
-   })
-   
-   
+      val seq = ContextHelper.getSparkContext.sequenceFile(seqFileLoc, classOf[IntWritable], classOf[Text], DataManipulator.getTotalCoresTask)
+      .map(data => data._2.toString())
+      seq.collect
+    })
    
    generateCSVList(seqList, delimiter)
-   
-
   }
   
   def generateCSVList(strList: List[String], delimiter: String): RDD[Row] = {
    
    val rowList = strList.map(data => {
      val splitData = data.split(delimiter)
-     outputLogger.incrementRecord
      Row(splitData:_*)
    })
    
-   ContextHelper.getSparkContext.parallelize(rowList, DataManipulator.getTotalCoresTask.toInt)
+   ContextHelper.getSparkContext.parallelize(rowList, DataManipulator.getTotalCoresTask)
   }
   
   def generateDataFrameFromListFile(listFile: String, schemaLoc: String, delimiter: String, cdrType: String): DataFrame = {
     val filteredSequences = readListFile(listFile, cdrType)
     val rdd = generateRDDRows(filteredSequences, delimiter)
     val schema = generateSchemaFromAvro(schemaLoc)
-    broadcast(ContextHelper.getHiveContext.createDataFrame(rdd, schema))
+    ContextHelper.getHiveContext.createDataFrame(rdd, schema).repartition(DataManipulator.getTotalCoresTask()).cache()
   }
   
 }

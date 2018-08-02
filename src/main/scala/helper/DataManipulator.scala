@@ -1,5 +1,6 @@
 package helper
 import org.apache.spark.sql.DataFrame
+import model.Transform
 import model.SourceTableInfo
 import model.TableList
 import model.ColumnMapping
@@ -97,8 +98,8 @@ object DataManipulator {
     cdrTypeFileName.split("/").last.toLowerCase().contains(cdrTypeVal.toLowerCase())
   }
   
-  def getTotalCoresTask(): Long = {
-    getExecutorInstanceCount * getExecutorCoreInstanceCount
+  def getTotalCoresTask(): Int = {
+    (getExecutorInstanceCount * getExecutorCoreInstanceCount).toInt
   }
   
   def getExecutorInstanceCount(): Int = {
@@ -110,4 +111,6 @@ object DataManipulator {
      4
 //     ContextHelper.getSparkContext().getConf.get("spark.executor.cores").toInt
    }
+   
+
 }

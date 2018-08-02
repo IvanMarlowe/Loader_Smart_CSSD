@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Fri Jul 20 14:11:43 SGT 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0164-b650-c340-00000e7e7498 
-on database directory C:\Users\Solvento\workspace\loader_smart_seq_file\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@284bdeed 
+Thu Aug 02 13:09:02 SGT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0164-f90a-0c94-000009d0cec8 
+on database directory C:\Users\Solvento\workspace\loader_smart_CSSD\metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@3c81cd82 
 Loaded from file:/C:/Users/Solvento/.ivy2/cache/org.apache.derby/derby/jars/derby-10.10.2.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
-user.dir=C:\Users\Solvento\workspace\loader_smart_seq_file
+user.dir=C:\Users\Solvento\workspace\loader_smart_CSSD
 os.name=Windows 7
 os.arch=amd64
 os.version=6.1

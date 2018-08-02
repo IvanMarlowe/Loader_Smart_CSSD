@@ -1,5 +1,6 @@
 package helper
 import UDF.Functions
+import org.apache.spark.scheduler.{SparkListener, SparkListenerTaskEnd, SparkListenerStageCompleted}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
@@ -21,6 +22,7 @@ object ContextHelper {
   
   private def initializeSparkContext: SparkContext = {
     _sparkContext = new SparkContext(initializeSparkConf)
+    addCountListener
     _sparkContext
   }
   
@@ -51,5 +53,15 @@ object ContextHelper {
     hiveContext.udf.register("decode_double", function.decodeDouble)
     hiveContext.udf.register("combine", function.combine)
     hiveContext.udf.register("compute", function.computeDouble)
+  }
+  
+  def addCountListener(){
+    _sparkContext.addSparkListener(new SparkListener() { 
+    override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
+        synchronized {
+          OutputLogger.incrementRecord(taskEnd) 
+        }
+      }
+    })
   }
 }
