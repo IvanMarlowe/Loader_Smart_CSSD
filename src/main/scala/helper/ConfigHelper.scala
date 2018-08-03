@@ -1,5 +1,6 @@
 package helper
 import org.apache.spark.sql.Row
+import model.Argument
 import model.{Transform, SourceInfo}
 import scala.collection.mutable.WrappedArray
 import org.apache.spark.sql.functions._
@@ -131,12 +132,25 @@ object ConfigHelper {
       val dataLocation = source.dataLocation
       val schemaLocation = source.schemaLocation
       if(sourceType.equalsIgnoreCase("SEQUENCE")){
-        DataFrameHelper.registerAllTables(dataLocation, schemaLocation, delimiter, source, cdrType)
+//        DataFrameHelper.registerAllTables(dataLocation, schemaLocation, delimiter, source, cdrType)
+        DataFrameHelper.registerAllTables(dataLocation, schemaLocation, source, delimiter)
       }
       else if(sourceType.equalsIgnoreCase("CSV")){
         DataFrameHelper.registerAllTables(dataLocation, schemaLocation, source)
       }
     })  
+  }
+  
+  def generateListFileAsSource(args: Argument){
+    val cdrType = args.cdrType()
+    val delimiter = args.delimiter()
+    val fileURI = args.fileURI()
+    val splitSource = fileURI.split("::")
+    val listFileLocation = splitSource.apply(0)
+    val schemaLocation = splitSource.apply(1)
+    val tempTableName = splitSource.apply(2)
+    
+    DataFrameHelper.generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType).registerTempTable(tempTableName)
   }
   
   def iterateTransformation(configFile: ConfigFileV3){
@@ -151,10 +165,10 @@ object ConfigHelper {
       val targetType = transform.targetType
       val outputFormat = transform.outputFormat
       val targetLocation = transform.targetLocation
-      if(targetType.equalsIgnoreCase("DATAFRAME")){ 
+      if(targetType.equalsIgnoreCase("STAGE")){ 
        hiveContext.sql(hql).repartition(DataManipulator.getTotalCoresTask()).registerTempTable(name)
       }
-      else if(targetType.equalsIgnoreCase("TABLE")){
+      else if(targetType.equalsIgnoreCase("TARGET")){
          OutputLogger.resetCount
          if(outputFormat.equalsIgnoreCase("PARQUET")){
            hiveContext

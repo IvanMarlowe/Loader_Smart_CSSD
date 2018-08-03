@@ -111,14 +111,18 @@ object DataFrameHelper {
     
     
   }
-  
+  //listfile use
   def registerAllTables(listFileLocation: String, schemaLocation: String, delimiter: String, source: SourceInfo, cdrType: String) {
     generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType)
     .registerTempTable(source.name)
   }
-  
+  //csv location
   def registerAllTables(CSVLocation: String, schemaLocation: String, source: SourceInfo) {
     generateDataFrameFromCSV(CSVLocation, schemaLocation, ",").registerTempTable(source.name)
+  }
+  
+  def registerAllTables(sequenceLocation: String, schemaLocation: String, source: SourceInfo, delimiter: String){
+    generateDataFrameFromSequenceFile(List(sequenceLocation),delimiter, schemaLocation ).registerTempTable(source.name)
   }
   
   
@@ -154,7 +158,11 @@ object DataFrameHelper {
   
   def generateDataFrameFromListFile(listFile: String, schemaLoc: String, delimiter: String, cdrType: String): DataFrame = {
     val filteredSequences = readListFile(listFile, cdrType)
-    val rdd = generateRDDRows(filteredSequences, delimiter)
+    generateDataFrameFromSequenceFile(filteredSequences, delimiter, schemaLoc)
+  }
+  
+  def generateDataFrameFromSequenceFile(listLoc: List[String], delimiter: String, schemaLoc: String): DataFrame = {
+    val rdd = generateRDDRows(listLoc, delimiter)
     val schema = generateSchemaFromAvro(schemaLoc)
     ContextHelper.getHiveContext.createDataFrame(rdd, schema).repartition(DataManipulator.getTotalCoresTask()).cache()
   }

@@ -58,9 +58,9 @@ object ContextHelper {
   def addCountListener(){
     _sparkContext.addSparkListener(new SparkListener() { 
     override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
-        synchronized {
+
           OutputLogger.incrementRecord(taskEnd) 
-        }
+
       }
     })
   }

@@ -9,7 +9,8 @@ class OutputGenerator(args: Argument){
   
   private val JSONFile = args.jsonFile()
   private val cdrType = args.cdrType()
-  private val delimiter = ","
+  private val fileURI = args.fileURI()
+  private val delimiter = args.delimiter()
   private val configBuilder = new ConfigBuilderV3(JSONFile)
   private val configFile = configBuilder.generateConfigFile()//build config file based on JSON File Location Specified
   
@@ -19,6 +20,7 @@ class OutputGenerator(args: Argument){
      * Base Table from the CSV Data and Avro Schema
      * List of Decode Tables from CSV
      * */
+    ConfigHelper.generateListFileAsSource(args)
     ConfigHelper.iterateSource(configFile, cdrType, delimiter)
     ConfigHelper.iterateTransformation(configFile)
     //Generate Record count and save as log file
