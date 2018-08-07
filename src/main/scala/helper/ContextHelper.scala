@@ -22,7 +22,7 @@ object ContextHelper {
   
   private def initializeSparkContext: SparkContext = {
     _sparkContext = new SparkContext(initializeSparkConf)
-    addCountListener
+//    addCountListener
     _sparkContext
   }
   
@@ -55,13 +55,13 @@ object ContextHelper {
     hiveContext.udf.register("compute", function.computeDouble)
   }
   
-  def addCountListener(){
-    _sparkContext.addSparkListener(new SparkListener() { 
-    override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
-
-          OutputLogger.incrementRecord(taskEnd) 
-
-      }
-    })
-  }
+//  def addCountListener(){
+//    _sparkContext.addSparkListener(new SparkListener() { 
+//    override def onTaskEnd(taskEnd: SparkListenerTaskEnd) {
+//
+//          OutputLogger.incrementRecord(taskEnd) 
+//
+//      }
+//    })
+//  }
 }

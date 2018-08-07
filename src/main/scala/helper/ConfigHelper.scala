@@ -1,5 +1,6 @@
 package helper
 import org.apache.spark.sql.Row
+import model.URIParam
 import model.Argument
 import model.{Transform, SourceInfo}
 import scala.collection.mutable.WrappedArray
@@ -125,7 +126,7 @@ object ConfigHelper {
     }).toList
   }
   
-  def iterateSource(configFile: ConfigFileV3, cdrType: String, delimiter: String){
+  def iterateSource(configFile: ConfigFileV3, uriParam: URIParam, delimiter: String){
     val sourceList = configFile.sourceList
     sourceList.map(source => {
       val sourceType = source.typing
@@ -141,14 +142,12 @@ object ConfigHelper {
     })  
   }
   
-  def generateListFileAsSource(args: Argument){
-    val cdrType = args.cdrType()
+  def generateListFileAsSource(args: Argument, uriParam: URIParam){
     val delimiter = args.delimiter()
-    val fileURI = args.fileURI()
-    val splitSource = fileURI.split("::")
-    val listFileLocation = splitSource.apply(0)
-    val schemaLocation = splitSource.apply(1)
-    val tempTableName = splitSource.apply(2)
+    val cdrType = uriParam.cdrType
+    val listFileLocation = uriParam.listFileLocation
+    val schemaLocation = uriParam.schemaLocation
+    val tempTableName = uriParam.tempTableName
     
     DataFrameHelper.generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType).registerTempTable(tempTableName)
   }
@@ -169,17 +168,18 @@ object ConfigHelper {
        hiveContext.sql(hql).repartition(DataManipulator.getTotalCoresTask()).registerTempTable(name)
       }
       else if(targetType.equalsIgnoreCase("TARGET")){
+         val df = hiveContext
+           .sql(hql)
+           .repartition(DataManipulator.getTotalCoresTask()).cache()
+         val count = df.count().toInt
          OutputLogger.resetCount
          if(outputFormat.equalsIgnoreCase("PARQUET")){
-           hiveContext
-           .sql(hql)
-           .repartition(DataManipulator.getTotalCoresTask())
+           df
            .write.mode("append")
            .parquet(targetLocation)
          }
          else if(outputFormat.equalsIgnoreCase("CSV")){
-           hiveContext.sql(hql)
-           .repartition(DataManipulator.getTotalCoresTask())
+           df
            .write
            .format("com.databricks.spark.csv")
            .mode("overwrite")
@@ -188,7 +188,7 @@ object ConfigHelper {
          else{
            throw new Exception("Only TABLE and CSV Type should be involved.")
          }
-         OutputLogger.addLogs(transform)
+         OutputLogger.addLogs(transform, count)
          
       }
       else{

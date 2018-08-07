@@ -1,5 +1,6 @@
 package helper
 import org.apache.spark.sql.types._
+import model.URIParam
 import model.ConfigFileV2
 import org.apache.spark.sql.functions._
 import model.Argument
@@ -8,8 +9,7 @@ import model.Argument
 class OutputGenerator(args: Argument){
   
   private val JSONFile = args.jsonFile()
-  private val cdrType = args.cdrType()
-  private val fileURI = args.fileURI()
+  private val uriParam = new URIParam(args.fileURI())
   private val delimiter = args.delimiter()
   private val configBuilder = new ConfigBuilderV3(JSONFile)
   private val configFile = configBuilder.generateConfigFile()//build config file based on JSON File Location Specified
@@ -20,8 +20,8 @@ class OutputGenerator(args: Argument){
      * Base Table from the CSV Data and Avro Schema
      * List of Decode Tables from CSV
      * */
-    ConfigHelper.generateListFileAsSource(args)
-    ConfigHelper.iterateSource(configFile, cdrType, delimiter)
+    ConfigHelper.generateListFileAsSource(args, uriParam)
+    ConfigHelper.iterateSource(configFile, uriParam, delimiter)
     ConfigHelper.iterateTransformation(configFile)
     //Generate Record count and save as log file
     OutputLogger.generateLogs(configFile)
