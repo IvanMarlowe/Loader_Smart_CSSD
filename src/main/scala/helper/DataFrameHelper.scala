@@ -10,11 +10,13 @@ import org.apache.spark.sql.types._
 import model.ColumnType
 import model.ColumnType._
 import org.apache.spark.sql.DataFrame
-import org.apache.hadoop.io.{IntWritable, Text}
+import org.apache.hadoop.io.{IntWritable, Text, BytesWritable}
 import scala.util.{Try, Success, Failure}
 import model.ColumnMapping
 import model.{ConfigFile, ConfigFileV3}
 import model.ArgumentGlobal
+import java.nio.charset.StandardCharsets
+import implicits.HiveContextUtils._
 object DataFrameHelper {
 
   def generateSchemaFromAvro(location: String): StructType = {
@@ -29,6 +31,17 @@ object DataFrameHelper {
     .apply(0)
     .asInstanceOf[WrappedArray[Row]]
     .toList
+    
+    val distinctList = schemaList
+    .map(data => data.getAs[String](nameCol))
+    .groupBy(identity)
+    .collect { case (x,ys) if ys.lengthCompare(1) > 0 => x }
+    
+    if(distinctList.size > 1){
+      CleanupHelper.cleanup()
+      throw new Exception("Duplicate Column Detected: " + distinctList.mkString(", "))
+    }
+    
     val schema = StructType(
       schemaList.map(data => {
         val dataType = data.getAs[WrappedArray[String]](typeCol).toList
@@ -43,7 +56,6 @@ object DataFrameHelper {
     schema
   }
   
-  
   def generateDataFrameFromCSV(CSVLocation: String, avroLocation:String, delimiter: String): DataFrame = {
     
     val fileNameCol = "file_name"
@@ -52,7 +64,7 @@ object DataFrameHelper {
     .withColumn(fileNameCol, lit(CSVLocation)
         .cast(org.apache.spark.sql.types.StringType)
      )
-     csvDF.repartition(10).cache()
+     csvDF.repartition(DataManipulator.getTotalCoresTask() * 2).cache()
   }
   
     def readAvro(location: String): DataFrame = {
@@ -90,6 +102,26 @@ object DataFrameHelper {
      }
   }
   
+  def readCSVFileWithCustomSchema(location:String, schema: StructType, delimiter: String, isCached: Boolean): DataFrame = {
+       Try(
+          ContextHelper.getHiveContext.read.format("com.databricks.spark.csv")
+          .option("header", "false")
+          .option("inferSchema", "false")
+          .option("delimiter", delimiter)
+        ) match {
+        case Success(data) => {
+          val df = data.schema(schema).load(location)  
+          if(isCached.equals(true)){
+            df.cache()
+          }
+          else{
+            df
+          }
+        }
+        case Failure(data) => throw new Exception("CSV File at location '" + location + "' does not exist.")
+       }
+  }
+  
   def generateWithAdditionalColumn(columnMappingList: List[ColumnMapping], df: DataFrame): DataFrame = {
     val schemaDf = df.schema.map(data => data.name.toString()).toList
     val additionalMappingQuery = columnMappingList.map(data => data.mapping() + " " + data.name()).toList
@@ -111,18 +143,20 @@ object DataFrameHelper {
     
     
   }
-  //listfile use
-  def registerAllTables(listFileLocation: String, schemaLocation: String, delimiter: String, source: SourceInfo, cdrType: String) {
-    generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType)
-    .registerTempTable(source.name)
+  
+  @deprecated
+  def registerAllTables(configFile: ConfigFileV3, listFileLocation: String, schemaLocation: String, delimiter: String, source: SourceInfo, cdrType: String) {
+    generateDataFrameFromListFile(source.name, configFile, listFileLocation, schemaLocation, delimiter, cdrType, true)
   }
+  
   //csv location
   def registerAllTables(CSVLocation: String, schemaLocation: String, source: SourceInfo) {
     generateDataFrameFromCSV(CSVLocation, schemaLocation, ",").registerTempTable(source.name)
   }
   
-  def registerAllTables(sequenceLocation: String, schemaLocation: String, source: SourceInfo, delimiter: String){
-    generateDataFrameFromSequenceFile(List(sequenceLocation),delimiter, schemaLocation ).registerTempTable(source.name)
+  def registerAllTables(configFile: ConfigFileV3, sequenceLocation: String, schemaLocation: String, source: SourceInfo, delimiter: String){
+    val tableName = source.name
+    generateDataFrameFromSequenceFile(tableName, configFile, List(sequenceLocation),delimiter, schemaLocation, true).registerTempTable(tableName)
   }
   
   
@@ -136,36 +170,69 @@ object DataFrameHelper {
     returned
   }
   
-  def generateRDDRows(seqFiles:List[String], delimiter: String): RDD[Row] = {
+  @deprecated
+  def generateRDDRows(seqFiles:List[String], delimiter: String, schema: StructType): RDD[Row] = {
     val seqList = seqFiles.flatMap(seqFileLoc => {
-      val seq = ContextHelper.getSparkContext.sequenceFile(seqFileLoc, classOf[IntWritable], classOf[Text], DataManipulator.getTotalCoresTask)
-      .map(data => data._2.toString())
-      seq.collect
+      val seq = ContextHelper.getSparkContext.sequenceFile(seqFileLoc, classOf[IntWritable], classOf[BytesWritable], DataManipulator.getTotalCoresTask)
+      .flatMap(data => new String(data._2.copyBytes(), StandardCharsets.UTF_8).split("\n"))
+      seq.collect()
     })
-   
-   generateCSVList(seqList, delimiter)
+    
+    
+
+   generateCSVList(seqList, delimiter, schema)
   }
   
-  def generateCSVList(strList: List[String], delimiter: String): RDD[Row] = {
-   
+  @deprecated
+  def generateCSVList(strList: List[String], delimiter: String, schema: StructType): RDD[Row] = {
+   val schemaSize = schema.size
+   val dataSize = strList.apply(0).split("\\" + delimiter, -1).size
+   val reducedSize = (dataSize - schemaSize).abs
    val rowList = strList.map(data => {
-     val splitData = data.split(delimiter)
+     val splitData = data.split(DataManipulator.replaceStringEscaped(delimiter), -1).dropRight(reducedSize)
      Row(splitData:_*)
    })
-   
-   ContextHelper.getSparkContext.parallelize(rowList, DataManipulator.getTotalCoresTask)
+
+   ContextHelper.getSparkContext.parallelize(rowList, DataManipulator.getTotalCoresTask() * 2)
   }
   
-  def generateDataFrameFromListFile(listFile: String, schemaLoc: String, delimiter: String, cdrType: String): DataFrame = {
+  def generateDataFrameFromListFile(tableName: String, configFile: ConfigFileV3, listFile: String, schemaLoc: String, delimiter: String, cdrType: String, isCached: Boolean){
     val filteredSequences = readListFile(listFile, cdrType)
-    generateDataFrameFromSequenceFile(filteredSequences, delimiter, schemaLoc)
+    generateDataFrameFromSequenceFile(tableName, configFile, filteredSequences, delimiter, schemaLoc, isCached)
+    .repartition(DataManipulator.getTotalCoresTask * 2)
+    .registerTempTable(tableName)
   }
   
-  def generateDataFrameFromSequenceFile(listLoc: List[String], delimiter: String, schemaLoc: String): DataFrame = {
-    val rdd = generateRDDRows(listLoc, delimiter)
+  def generateDataFrameFromSequenceFile(tableName: String, configFile: ConfigFileV3, listLoc: List[String], delimiter: String, schemaLoc: String, isCached: Boolean): DataFrame = {
     val schema = generateSchemaFromAvro(schemaLoc)
-    ContextHelper.getHiveContext.createDataFrame(rdd, schema).repartition(DataManipulator.getTotalCoresTask()).cache()
+    val location = configFile.envLocation.concat("/" + ContextHelper.getSparkContext().applicationId).concat("_").concat(tableName)
+    ContextHelper.getHiveContext.saveTemporaryCSV(listLoc, location)
+    readCSVFileWithCustomSchema(location, schema, delimiter, isCached)
+//    ContextHelper.getHiveContext.createDataFrameFromList(listLoc, schema, isCached)
   }
   
+  def generateDataFrameFromSequence(schema: StructType, rdd: RDD[Row], isCached: Boolean): DataFrame = {
+    if(isCached.equals(true)){  
+      ContextHelper.getHiveContext.createDataFrame(rdd, schema).cache()
+    }
+    else{
+      ContextHelper.getHiveContext.createDataFrame(rdd, schema)
+    }
+  }
+  
+  def saveTemporaryCSV(seqFiles: List[String], location: String){
+    val emptyRDD:RDD[String] = ContextHelper.getSparkContext().emptyRDD
+    val sequenceList = seqFiles.map(seqLoc => {
+      val sequenceList = ContextHelper.getSparkContext().sequenceFile(seqLoc, classOf[IntWritable], classOf[BytesWritable], DataManipulator.getTotalCoresTask)
+      sequenceList
+      .flatMap(data => new String(data._2.copyBytes(), StandardCharsets.UTF_8).split("\n"))
+      .repartition(DataManipulator.getTotalCoresTask)
+    })
+    .foldLeft(emptyRDD)((x, y) => x.union(y))
+
+    DataManipulator.deleteIfExistsFile(location)
+    CleanupHelper.addToDelete(location)
+    sequenceList.saveAsTextFile(location)
+  }
 }
 

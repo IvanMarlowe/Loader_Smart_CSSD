@@ -1,5 +1,7 @@
 package helper
 import org.apache.spark.sql.Row
+import org.apache.hadoop.fs._
+import sys.process._
 import model.URIParam
 import model.Argument
 import model.{Transform, SourceInfo}
@@ -83,6 +85,13 @@ object ConfigHelper {
     data.getAs[String]("schema_location")
   }
   
+  def generateEnvLocation(data: Row) = {
+    data.getAs[String]("env_location")
+  }
+  
+  def generateIsCached(data: Row) = {
+    data.getAs[String]("cached").toLowerCase().toBoolean
+  }
   
   def generateSourceProperties(data:Row): List[SourceInfo] = {
     val rowData = data.getAs[WrappedArray[Row]]("source_list")
@@ -113,8 +122,10 @@ object ConfigHelper {
       val truncateTarget = generateTruncateTarget(transformData)
       val targetLocation = generateTargetLocation(transformData)
       val outputFormat = generateOutputFormat(transformData)
+      val isCached = generateIsCached(transformData)
       val hql = generateHql(transformData)
       val transform = new Transform
+      transform.isCached_(isCached)
       transform.outputFormat_(outputFormat)
       transform.targetType_(targetType)
       transform.targetName_(targetName)
@@ -133,8 +144,7 @@ object ConfigHelper {
       val dataLocation = source.dataLocation
       val schemaLocation = source.schemaLocation
       if(sourceType.equalsIgnoreCase("SEQUENCE")){
-//        DataFrameHelper.registerAllTables(dataLocation, schemaLocation, delimiter, source, cdrType)
-        DataFrameHelper.registerAllTables(dataLocation, schemaLocation, source, delimiter)
+        DataFrameHelper.registerAllTables(configFile, dataLocation, schemaLocation, source, delimiter)
       }
       else if(sourceType.equalsIgnoreCase("CSV")){
         DataFrameHelper.registerAllTables(dataLocation, schemaLocation, source)
@@ -142,14 +152,15 @@ object ConfigHelper {
     })  
   }
   
-  def generateListFileAsSource(args: Argument, uriParam: URIParam){
+  def generateListFileAsSource(configFile: ConfigFileV3, args: Argument, uriParam: URIParam){
     val delimiter = args.delimiter()
     val cdrType = uriParam.cdrType
     val listFileLocation = uriParam.listFileLocation
     val schemaLocation = uriParam.schemaLocation
     val tempTableName = uriParam.tempTableName
+    val isCached = uriParam.isCached
     
-    DataFrameHelper.generateDataFrameFromListFile(listFileLocation, schemaLocation, delimiter, cdrType).registerTempTable(tempTableName)
+    DataFrameHelper.generateDataFrameFromListFile(tempTableName, configFile, listFileLocation, schemaLocation, delimiter, cdrType, isCached)
   }
   
   def iterateTransformation(configFile: ConfigFileV3){
@@ -164,37 +175,55 @@ object ConfigHelper {
       val targetType = transform.targetType
       val outputFormat = transform.outputFormat
       val targetLocation = transform.targetLocation
+      val isCached = transform.isCached
       if(targetType.equalsIgnoreCase("STAGE")){ 
        hiveContext.sql(hql).repartition(DataManipulator.getTotalCoresTask()).registerTempTable(name)
       }
+      else if(targetType.equalsIgnoreCase("COMMAND")){
+       hiveContext.sql(hql) 
+      }
       else if(targetType.equalsIgnoreCase("TARGET")){
-         val df = hiveContext
-           .sql(hql)
-           .repartition(DataManipulator.getTotalCoresTask()).cache()
-         val count = df.count().toInt
-         OutputLogger.resetCount
+         val df = {
+           val data = hiveContext
+             .sql(hql)
+             .coalesce(DataManipulator.getTotalCoresTask())
+           if(isCached.equals(true)){
+             data
+             .cache()
+           }
+           else{
+             data
+           }  
+         }
+         
          if(outputFormat.equalsIgnoreCase("PARQUET")){
            df
            .write.mode("append")
            .parquet(targetLocation)
          }
          else if(outputFormat.equalsIgnoreCase("CSV")){
+           val outputTmpDir = configFile.envLocation.concat("/" + ContextHelper.getSparkContext().applicationId).concat("_").concat(System.nanoTime().toString)
            df
            .write
            .format("com.databricks.spark.csv")
+           .option("delimiter", "|")
            .mode("overwrite")
-           .save(targetLocation)
+           .save(outputTmpDir)
+           
+           
+           OutputLogger.addRecordSizeInBytesToLogs(transform, outputTmpDir)
+           PersistHelper.transferFile(outputTmpDir, targetLocation)
          }
          else{
            throw new Exception("Only TABLE and CSV Type should be involved.")
          }
-         OutputLogger.addLogs(transform, count)
+         val count = df.count().toInt
+         OutputLogger.addRecordSizeToLogs(transform, count)
          
       }
       else{
-        throw new Exception("Only TABLE and DATAFRAME Type should be inolved.")
+        throw new Exception("Only TABLE , COMMAND and DATAFRAME Type should be involved.")
       }
     })
-    
   }
 }

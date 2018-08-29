@@ -1,4 +1,7 @@
 import org.apache.spark.sql.hive.HiveContext
+import org.apache.hadoop._
+import org.apache.spark.sql.SQLContext
+import java.nio.charset.StandardCharsets
 import org.apache.spark.sql.DataFrame
 import helper.ContextHelper
 import org.apache.spark.sql.functions._
@@ -7,18 +10,25 @@ import scala.collection.mutable.WrappedArray
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.{Encoder, Encoders}
 import model.ColumnMapping
+import sys.process._
 import org.apache.spark.sql.SQLImplicits
 import org.apache.spark.sql.Encoders.kryo
 import helper.DataManipulator
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.spark.rdd.SequenceFileRDDFunctions
 import org.apache.spark.rdd.RDD
-import org.apache.hadoop.io.{IntWritable, Text}
+import org.apache.hadoop.io.{IntWritable, BytesWritable, Text}
 import scala.io._
+import org.apache.hadoop.mapreduce.Job
+import org.apache.hadoop.fs._
 object generator{
   def main(args: Array[String]) {
+    val parquetSourceLoc = args(0)
+    val parquetTgtLoc = args(1)
+    val colName = args(2)
 //    val sparkContext = ContextHelper.getSparkContext()
-    val hiveContext = ContextHelper.getHiveContext
+//    val hiveContext = ContextHelper.getHiveContext
+//    val sc = ContextHelper.getSparkContext()
 //    val hiveContext = ContextHelper.getHiveContext//new org.apache.spark.sql.hive.HiveContext(new SparkContext(new SparkConf()))
 //    val df = hiveContext.range(0, 10/*20000000*/)
     
@@ -72,8 +82,8 @@ object generator{
     
 //    sparkContext.parallelize(tupList).repartition(1).saveAsSequenceFile("C:/user/hive/warehouse/tup_seq")
 //    rdd.saveAsSequenceFile("C:/user/hive/warehouse/gen_seq")
-    hiveContext.sql("msck repair table tempo_one_table")
-    hiveContext.sql("select * from tempo_one_table").show(false)
+//    hiveContext.sql("msck repair table tempo_one_table")
+//    hiveContext.sql("select * from tempo_one_table").show(false)
 //    hiveContext.range(2).withColumn("trans_1", lit(rand() * 1000000)).withColumn("country", lit("Singapore")).withColumn("trans_2", lit(rand() * 10000)).withColumn("trans_3", lit(rand() * 52500))
 //    .unionAll(
 //      hiveContext.range(100000).withColumn("country", lit("China")).withColumn("trans_1", lit(rand() * 1000000)).withColumn("trans_2", lit(rand() * 10000)).withColumn("trans_3", lit(rand() * 52500))    
@@ -103,5 +113,95 @@ object generator{
    
 //   val a = seq.collect()
 //    hiveContext.range(1).write.saveAsTable("num_sample")
+    
+    
+//    val data = sc.sequenceFile("/data/oneocs/normal/sms/20180801/ONEOCS-IDC-normal-SMS-2018080112-RAW01_20180807194146101.sf", classOf[IntWritable], classOf[BytesWritable])//.map(x => Text.decode(x._2.copyBytes()).split("\n"))
+//    data.saveAsHadoopFile(path, keyClass, valueClass, outputFormatClass, codec)
+//     val data = sc
+//     .sequenceFile("C:/Users/Solvento/Downloads/ONEOCS-IDC-normal-VOU-2018080112-RAW01_20180807194140101.sf", classOf[IntWritable], classOf[BytesWritable])
+//     .map(x => Text.decode(x._2.copyBytes()).split("\n"))
+//     .collect
+//     .flatten
+//     
+//     println(data.size + " WEW")
+////     .map(wew)
+//     
+     
+//     sc.parallelize(data).saveAsTextFile("C:/user/hive/warehouse/VOUCHER.CSV")
+     
+     
+     
+//    val sqlContext = new SQLContext(sc)
+//    import sqlContext.implicits._
+//    val x = for (key <- 1 to 1000000) yield (key, 1)
+    
+//    sc.parallelize(x).toDF("key", "value").registerTempTable("df")
+//    import scala.util.Random
+//    sc.parallelize(Random.shuffle(x)).toDF("key", "value").registerTempTable("df1")
+//    sc.parallelize(Random.shuffle(x)).toDF("key", "value").registerTempTable("df2")
+    
+//    hiveContext.sql("CACHE TABLE df")
+    
+//    hiveContext.sql("select rand(10)").show(false)
+//    val rangeDf = hiveContext.range(1000000).selectExpr("id", "floor(rand(10) * 10) random").registerTempTable("df")
+//    hiveContext.sql("select distinct random from df").show(false)
+//    val newDf = hiveContext.sql("select * from df").repartition(col("random"))
+//    println(newDf.rdd.partitions)
+//    val newDf2 = hiveContext.sql("select * from df")
+//    println(newDf2.rdd.getNumPartitions + " WEW 2")
+//    sqlContext.sql("SELECT * FROM df cluster by key JOIN df1 ON df.key = df1.key ").show
+//    hiveContext.sql("SELECT * FROM df cluster by key").show(false)
+//    sqlContext.sql("SELECT * FROM df JOIN df2 ON df.key = df2.key").show
+//    System.in.read()
+     
+//     hiveContext.range(1000000).selectExpr("cast((id + 2000000) as String) TransID").selectExpr("TransID", "rand(1000) Random", "'1' ISOCODE", "'3' CodeNum", "'PHP' Currency", "'Philippines' Country")
+//     .unionAll(
+//        hiveContext.range(1000000).selectExpr("cast((id + 3000000) as String) TransID").selectExpr("TransID", "rand(1000) Random", "'2' ISOCODE", "'4' CodeNum", "'USD' Currency", "'United States' Country") 
+//     )
+//     .unionAll(
+//       hiveContext.range(1000000).selectExpr("cast((id + 4000000) as String) TransID").selectExpr("TransID", "rand(1000) Random", "'3' ISOCODE", "'5' CodeNum", "'YEN' Currency", "'Japan' Country")    
+//     )
+//     .unionAll(
+//       hiveContext.range(1000000).selectExpr("cast((id + 5000000) as String) TransID").selectExpr("TransID", "rand(1000) Random", "'5' ISOCODE", "'5' CodeNum", "'NZD' Currency", "'New Zealand' Country")
+//     )
+//     .write.mode("append")
+//     .partitionBy("country
+//     .saveAsTable("country_data")
+     
+//     hiveContext.sql("select * from country_data where country = 'Singapore'").show(false)
+     
+//     hiveContext.range(1000000).selectExpr("cast((id + 2000000) as String) TransID").selectExpr("TransID", "rand(1000) Random", "'1' ISOCODE", "'3' CodeNum", "'PHP' Currency", "'Philippines' Country")
+//     .registerTempTable("a")
+//     sc.
+//     hiveContext.sql("select * from (select * from a join (select 'wewers') b where Currency  = 'PHP') c cluster by Random").show(false)
+    
+//    val newRDD1 = sc.sequenceFile("/data/oneocs/normal/sms/20180801/ONEOCS-IDC-normal-SMS-2018080112-RAW01_20180807194146101.sf", classOf[IntWritable], classOf[BytesWritable], 20).flatMap(data => {
+//  new String(data._2.copyBytes(), StandardCharsets.UTF_8)
+//  .split("\n")
+//  .map(str => str.split("\\|").drop(2).mkString("|"))
+//})
+//     val partFiles = fs.globStatus(new Path("C:/user/hive/warehouse" + "/*"))
+//     
+//     partFiles.take(1).map(data => {
+//       println(data.getPath.toString)
+//     })
+    
+//    println("hdfs dfs -ls /".!)
+    
+//    fs.globStatus(new Path("C:/user/hive/warehouse" + "/*")).
+//     val dataSize = FileSystem.getF
+//     .getUsed
+     
+//     println(dataSize + " WEW")
+      ContextHelper.getHiveContext.read.parquet(parquetSourceLoc).repartition(10)
+      .withColumn("ld_dt", expr("substr("+ colName + ", 0, 8)"))
+      .withColumn("ld_hr", expr("substr(" + colName + ", 9, 2)")).withColumnRenamed(colName, "strt_dt")
+      .write
+      .mode("append")
+      .partitionBy("ld_dt", "ld_hr")
+      .parquet(parquetTgtLoc)
+
+//     ContextHelper.getHiveContext.sql("").sort
   }
+  
 }

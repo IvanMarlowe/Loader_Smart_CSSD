@@ -8,7 +8,9 @@ class ConfigBuilderV3(loc: String) extends ConfigBuilder(loc){
     val transformList = ConfigHelper.generateTransformProperties(data)
     val sourceList = ConfigHelper.generateSourceProperties(data)
     val logLocation = ConfigHelper.generateLogLocation(data)
+    val envLocation = ConfigHelper.generateEnvLocation(data)
     val configFile = new ConfigFileV3
+    configFile.envLocation_(envLocation)
     configFile.logLocation_(logLocation)
     configFile.transformList_(transformList)
     configFile.sourceList_(sourceList)

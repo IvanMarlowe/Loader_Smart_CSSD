@@ -28,6 +28,7 @@ object ContextHelper {
   
   private def initializeSparkConf = {
     new org.apache.spark.SparkConf()
+    .set("spark.sql.parquet.mergeSchema", "false")
       .setAppName("Smart_ingest")
       .setMaster("local")
   }
@@ -45,6 +46,7 @@ object ContextHelper {
   
   private def ApplyUDFs(hiveContext: HiveContext, function: Functions) {
 //    hiveContext.udf.register("md5", function.md5Converter)//apply md5 function as custom hive function
+    hiveContext.sparkContext.hadoopConfiguration.set("parquet.enable.summary-metadata", "false")
     hiveContext.setConf("spark.sql.parquet.compression.codec","snappy") 
     hiveContext.setConf("spark.dynamicAllocation.enabled ", "true")
     hiveContext.udf.register("convert_hash", function.newHashKeyConverter)

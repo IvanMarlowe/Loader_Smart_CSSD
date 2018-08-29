@@ -20,11 +20,12 @@ class OutputGenerator(args: Argument){
      * Base Table from the CSV Data and Avro Schema
      * List of Decode Tables from CSV
      * */
-    ConfigHelper.generateListFileAsSource(args, uriParam)
+    
+    ConfigHelper.generateListFileAsSource(configFile, args, uriParam)
     ConfigHelper.iterateSource(configFile, uriParam, delimiter)
     ConfigHelper.iterateTransformation(configFile)
     //Generate Record count and save as log file
     OutputLogger.generateLogs(configFile)
-
+    CleanupHelper.cleanup()
   }
 }

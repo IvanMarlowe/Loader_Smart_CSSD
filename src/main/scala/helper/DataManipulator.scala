@@ -1,5 +1,8 @@
 package helper
 import org.apache.spark.sql.DataFrame
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
 import model.Transform
 import model.SourceTableInfo
 import model.TableList
@@ -95,7 +98,7 @@ object DataManipulator {
   }
   
   def chosenCdr(cdrTypeVal: String, cdrTypeFileName: String): Boolean = {
-    cdrTypeFileName.split("/").last.toLowerCase().contains(cdrTypeVal.toLowerCase())
+    cdrTypeFileName.split("/").last.toLowerCase().split("\\-").apply(3).contains(cdrTypeVal.toLowerCase())
   }
   
   def getTotalCoresTask(): Int = {
@@ -103,14 +106,28 @@ object DataManipulator {
   }
   
   def getExecutorInstanceCount(): Int = {
-//    ContextHelper.getSparkContext().getConf.get("spark.executor.instances").toInt
-    1
+    ContextHelper.getSparkContext().getConf.get("spark.executor.instances").toInt
+//    1
    }
    
    def getExecutorCoreInstanceCount(): Int = {
-     4
-//     ContextHelper.getSparkContext().getConf.get("spark.executor.cores").toInt
+//     4
+     ContextHelper.getSparkContext().getConf.get("spark.executor.cores").toInt
    }
    
+   def replaceStringEscaped(char: String) = {
+     char match{
+       case "|" => "|"
+       case "," => ","
+     }
+   }
+   
+   def deleteIfExistsFile(location: String){
+     println("Location to be deleted: " + location)
+     val fs = FileSystem.get(ContextHelper.getSparkContext().hadoopConfiguration)
+     if(fs.exists(new Path(location))){
+      fs.delete(new Path(location),true)
+     }
+   }
 
 }
