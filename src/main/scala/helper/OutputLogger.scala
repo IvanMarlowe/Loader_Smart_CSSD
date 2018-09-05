@@ -36,23 +36,30 @@ object OutputLogger {
   def resetCount = 0//recordAccumulator.setValue(0)
   
   def addRecordSizeToLogs(transform: Transform, count: Int){
-    val processNumber = transform.processNumber
-    val locationDump = transform.targetLocation
-    val totalRecordStr = "Total Record Count persisted at location '" + locationDump + "': " + count + " Records."
+    val totalRecordStr = {
+      if(transform.targetType.equalsIgnoreCase("table")){
+        "Total Record Count persisted at table '" + transform.target + "': " + count + " Records."
+      }
+      else{
+        "Total Record Count persisted at directory '" + transform.target + "': " + count + " Records."
+      }
+    }
+    
+    
     collectedLogs = collectedLogs:::List(totalRecordStr)
   }
   
   def addRecordSizeInBytesToLogs(transform: Transform, tmpLocation: String){
-    val locationDump = transform.targetLocation
-    val strBytes = ("hdfs dfs -du -s " + tmpLocation).!!.toString().dropRight(1).split(" ").apply(0)
-    val sizeStr = "Total size persisted at location '" + locationDump + "': " + strBytes + " bytes."
-    collectedLogs = collectedLogs:::List(sizeStr)
+//    val locationDump = transform.targetLocation
+//    val strBytes = ("hdfs dfs -du -s " + tmpLocation).!!.toString().dropRight(1).split(" ").apply(0)
+//    val sizeStr = "Total size persisted at location '" + locationDump + "': " + strBytes + " bytes."
+//    collectedLogs = collectedLogs:::List(sizeStr)
   }
   
   def generateLogs(configFile: ConfigFileV3){
-    
-    DataManipulator.deleteIfExistsFile(configFile.logLocation)
-    val logs = collectedLogs.toSeq:+("Total Transformation Run time: " + (System.nanoTime - runTime) / 1e9d)
-    ContextHelper.getSparkContext().parallelize(logs, 1).saveAsTextFile(configFile.logLocation)
+//    
+//    DataManipulator.deleteIfExistsFile(configFile.logLocation)
+//    val logs = collectedLogs.toSeq:+("Total Transformation Run time: " + (System.nanoTime - runTime) / 1e9d)
+//    ContextHelper.getSparkContext().parallelize(logs, 1).saveAsTextFile(configFile.logLocation)
   }
 }

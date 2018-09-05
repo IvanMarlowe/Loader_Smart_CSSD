@@ -1,30 +1,39 @@
 package model
 
 class Transform {
-  private var _processNumber = ""
+  private var _sourceList = List[SourceInfo]()
+  private var _target = ""
   private var _targetType = ""
-  private var _targetName = ""
-  private var _truncateTarget = ""
-  private var _isCached:Boolean = _
-  private var _targetLocation = ""
+  private var _setProperties = List[String]()
   private var _hql = ""
-  private var _outputFormat = ""
-  def hql = _hql
-  def logLocation = ""
-  def targetLocation = _targetLocation
-  def processNumber = _processNumber
-  def isCached = _isCached
+  private var _partitionColumns = List[String]()
+  private var _fileType = ""
+  private var _shuffled = ""
+  private var _partitionSize:Int = 0
+  private var _cached: Boolean = false
+  private var _truncateTarget = false
+  
+  def sourceList = _sourceList
+  def target = _target
   def targetType = _targetType
-  def targetName = _targetName
+  def setProperties = _setProperties
+  def hql = _hql
+  def partitionColumns = _partitionColumns
+  def fileType = _fileType
+  def shuffled = _shuffled
+  def partitionSize = _partitionSize
+  def cached = _cached
   def truncateTarget = _truncateTarget
-
-  def outputFormat = _outputFormat
-  def isCached_(ic: Boolean) = _isCached = ic
-  def processNumber_(pn: String) = _processNumber = pn
+  
+  def sourceList_(sl: List[SourceInfo]) = _sourceList = sl
+  def target_(t: String) = _target = t
   def targetType_(tt: String) = _targetType = tt
-  def truncateTarget_(tgt: String) = _truncateTarget = tgt
-  def targetName_(tn:String) = _targetName = tn
-  def targetLocation_(tl: String) = _targetLocation = tl
+  def setProperties_(sp: List[String]) = _setProperties = sp
   def hql_(h: String) = _hql = h
-  def outputFormat_(of: String) = _outputFormat = of
+  def partitionColumns_(pc: List[String]) = _partitionColumns = pc
+  def fileType_(ft: String) = _fileType = ft
+  def shuffled_(s: String) = _shuffled = s
+  def partitionSize_(ps: Int) = _partitionSize = ps
+  def cached_(c: Boolean) = _cached = c
+  def truncateTarget_(tt: Boolean) = _truncateTarget = tt
 }

@@ -30,6 +30,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\Root.class[0m
 [0m[[0mdebug[0m] [0m	UDF\Functions$$anonfun$1$$anonfun$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\UDF\Functions$$anonfun$1$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	SourceGenerator$$anonfun$1$$anonfun$apply$1.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\SourceGenerator$$anonfun$1$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$15.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$15.class[0m
 [0m[[0mdebug[0m] [0m	model\ColumnMapping.class[0m
@@ -112,6 +114,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions$$anonfun$2$$anonfun$3.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$JSONDuplicateStepException.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$JSONDuplicateStepException.class[0m
+[0m[[0mdebug[0m] [0m	helper\ConfigHelper$$anonfun$iterateTransformation$1$$anonfun$apply$2.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\ConfigHelper$$anonfun$iterateTransformation$1$$anonfun$apply$2.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$6.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$6.class[0m
 [0m[[0mdebug[0m] [0m	Util\ExecuteLoaderFunctions.class[0m
@@ -144,6 +148,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\LoadTransaction.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$28.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$28.class[0m
+[0m[[0mdebug[0m] [0m	SourceGenerator$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\SourceGenerator$$anonfun$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$29$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$29$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\TransactionDataType$.class[0m
@@ -152,8 +158,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\Transform$$anonfun$updateKeys$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\JSONObjectCollector$$anonfun$3.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\JSONObjectCollector$$anonfun$3.class[0m
-[0m[[0mdebug[0m] [0m	helper\ConfigHelper$$anonfun$iterateSource$1.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\ConfigHelper$$anonfun$iterateSource$1.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$NonExistingExpirationColumnInTarget$.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$NonExistingExpirationColumnInTarget$.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataManipulationFunctions$$anonfun$3$$anonfun$4.class[0m
@@ -172,8 +176,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions$$anonfun$14.class[0m
 [0m[[0mdebug[0m] [0m	Util\ExecuteLoaderFunctions$$anonfun$5.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\ExecuteLoaderFunctions$$anonfun$5.class[0m
-[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$13.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$13.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$16$$anonfun$apply$4.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$16$$anonfun$apply$4.class[0m
 [0m[[0mdebug[0m] [0m	Util\LoaderFunctions$$anonfun$chooseQueryMode$2$$anonfun$apply$1.class[0m
@@ -312,8 +314,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$5.class[0m
 [0m[[0mdebug[0m] [0m	helper\OutputLogger.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\OutputLogger.class[0m
-[0m[[0mdebug[0m] [0m	sample$$anonfun$main$2.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\sample$$anonfun$main$2.class[0m
 [0m[[0mdebug[0m] [0m	helper\PersistHelper.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\PersistHelper.class[0m
 [0m[[0mdebug[0m] [0m	helper\CleanupHelper$$anonfun$cleanup$1.class[0m
@@ -332,8 +332,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\SparkHelper$$typecreator5$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$29$$anonfun$apply$4.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$29$$anonfun$apply$4.class[0m
-[0m[[0mdebug[0m] [0m	sample$$anonfun$main$1.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\sample$$anonfun$main$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataManipulationFunctions.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\JSONColumnList.class[0m
@@ -372,6 +370,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\LoaderFunctions$$anonfun$chooseQueryMode$2.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$21.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$21.class[0m
+[0m[[0mdebug[0m] [0m	SourceGenerator$.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\SourceGenerator$.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$JSONColumnNotFoundException.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$JSONColumnNotFoundException.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$sortDir$1.class[0m
@@ -380,8 +380,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$JSONColumnNotFoundException$.class[0m
 [0m[[0mdebug[0m] [0m	helper\OutputGenerator.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\OutputGenerator.class[0m
-[0m[[0mdebug[0m] [0m	sample$$anonfun$main$3.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\sample$$anonfun$main$3.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$27.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$27.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataEvaluator$$anonfun$31.class[0m
@@ -414,6 +412,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataEvaluator$$anonfun$21$$anonfun$apply$3.class[0m
 [0m[[0mdebug[0m] [0m	Util\ExecuteLoaderFunctions$$anonfun$6.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\ExecuteLoaderFunctions$$anonfun$6.class[0m
+[0m[[0mdebug[0m] [0m	SourceGenerator$$anonfun$2.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\SourceGenerator$$anonfun$2.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataManipulationFunctions$$anonfun$2$$anonfun$3$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions$$anonfun$2$$anonfun$3$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$JSONJobNotFoundException.class[0m
@@ -442,6 +442,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\JSONObjectCollector$$anonfun$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\SaveFunctions$$anonfun$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\SaveFunctions$$anonfun$1.class[0m
+[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$14.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$14.class[0m
 [0m[[0mdebug[0m] [0m	LoadSatellite$.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\LoadSatellite$.class[0m
 [0m[[0mdebug[0m] [0m	Util\ObjectBuilderSatellite$$anonfun$1.class[0m
@@ -466,10 +468,10 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions$$anonfun$6.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$16.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$16.class[0m
+[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$15$$anonfun$apply$1.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$15$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$computeJoinConditionDfWithNewCol$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$computeJoinConditionDfWithNewCol$2.class[0m
-[0m[[0mdebug[0m] [0m	helper\ConfigHelper$$anonfun$iterateTransformation$2.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\ConfigHelper$$anonfun$iterateTransformation$2.class[0m
 [0m[[0mdebug[0m] [0m	model\Transform.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\model\Transform.class[0m
 [0m[[0mdebug[0m] [0m	model\ViewTable.class[0m
@@ -548,8 +550,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\CleanupCollector.class[0m
 [0m[[0mdebug[0m] [0m	Util\SparkHelper$$typecreator2$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\SparkHelper$$typecreator2$1.class[0m
-[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$13$$anonfun$14.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$13$$anonfun$14.class[0m
 [0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$2.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataManipulationFunctions$$anonfun$5$$anonfun$6$$anonfun$7.class[0m
@@ -584,8 +584,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\SparkHelper.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$13.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$13.class[0m
-[0m[[0mdebug[0m] [0m	sample$SparkStage$.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\sample$SparkStage$.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$sortDir$1$$anonfun$apply$mcVJ$sp$1$$anonfun$apply$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$sortDir$1$$anonfun$apply$mcVJ$sp$1$$anonfun$apply$2.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$13$$anonfun$apply$2.class[0m
@@ -626,6 +624,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\ExecuteLoaderFunctions$$anonfun$1.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\TransactionData.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\TransactionData.class[0m
+[0m[[0mdebug[0m] [0m	helper\ConfigHelper$$anonfun$iterateTransformation$1$$anonfun$apply$1.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\ConfigHelper$$anonfun$iterateTransformation$1$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	helper\PersistHelper$$anonfun$transferFile$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\PersistHelper$$anonfun$transferFile$1.class[0m
 [0m[[0mdebug[0m] [0m	sample.class[0m
@@ -872,8 +872,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\Transform$$anonfun$partitions$2.class[0m
 [0m[[0mdebug[0m] [0m	helper\DataManipulator.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataManipulator.class[0m
-[0m[[0mdebug[0m] [0m	sample$SparkStage.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\sample$SparkStage.class[0m
 [0m[[0mdebug[0m] [0m	UDF\Functions$$anonfun$dropColumns$1.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\UDF\Functions$$anonfun$dropColumns$1.class[0m
 [0m[[0mdebug[0m] [0m	Util\JSONObjectCollector$$anonfun$5.class[0m
@@ -902,8 +900,8 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataManipulationFunctions$$anonfun$6$$anonfun$7$$anonfun$apply$4.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\Returnable.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\Returnable.class[0m
-[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$17.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$17.class[0m
+[0m[[0mdebug[0m] [0m	SourceGenerator.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\SourceGenerator.class[0m
 [0m[[0mdebug[0m] [0m	Util\DataFrameFunctions$$anonfun$computeNotJoinConditionDf$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\DataFrameFunctions$$anonfun$computeNotJoinConditionDf$2.class[0m
 [0m[[0mdebug[0m] [0m	UDF\Functions$$typecreator5$1.class[0m
@@ -914,8 +912,6 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$JSONExpectedNumericalException$.class[0m
 [0m[[0mdebug[0m] [0m	Util\ObjectBuilder.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Util\ObjectBuilder.class[0m
-[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$16$$anonfun$apply$1.class[0m
-[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$16$$anonfun$apply$1.class[0m
 [0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$16.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$16.class[0m
 [0m[[0mdebug[0m] [0m	Util\ExecuteLoaderFunctions$$anonfun$11.class[0m
@@ -930,12 +926,16 @@
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$TargetTableTypeShouldNotBeDataFrame.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$JSONFileNotFoundException.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$JSONFileNotFoundException.class[0m
+[0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$12$$anonfun$13.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$12$$anonfun$13.class[0m
 [0m[[0mdebug[0m] [0m	helper\DataFrameHelper$.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\ExceptionClassCollection$TargetTablesNonExistentException.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\Parameters\ExceptionClassCollection$TargetTablesNonExistentException.class[0m
 [0m[[0mdebug[0m] [0m	implicits\HiveContextUtils$HiveWithSaveCSV$$anonfun$3$$anonfun$4$$anonfun$apply$2.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\implicits\HiveContextUtils$HiveWithSaveCSV$$anonfun$3$$anonfun$4$$anonfun$apply$2.class[0m
+[0m[[0mdebug[0m] [0m	helper\PersistHelper$$anonfun$transferFile$2.class[0m
+[0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\PersistHelper$$anonfun$transferFile$2.class[0m
 [0m[[0mdebug[0m] [0m	helper\DataFrameHelper$$anonfun$5.class[0m
 [0m[[0mdebug[0m] [0m	  C:\Users\Solvento\workspace\loader_smart_CSSD\target\scala-2.10\classes\helper\DataFrameHelper$$anonfun$5.class[0m
 [0m[[0mdebug[0m] [0m	Parameters\QueryMode$.class[0m

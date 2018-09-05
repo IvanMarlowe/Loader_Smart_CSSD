@@ -97,7 +97,7 @@ object DataFrameHelper {
         .option("inferSchema", "false")
         .option("delimiter", delimiter)
       ) match {
-      case Success(data) => data.schema(schema).load(location).cache()
+      case Success(data) => data.schema(schema).load(location)
       case Failure(data) => throw new Exception("CSV File at location '" + location + "' does not exist.")
      }
   }
@@ -146,17 +146,17 @@ object DataFrameHelper {
   
   @deprecated
   def registerAllTables(configFile: ConfigFileV3, listFileLocation: String, schemaLocation: String, delimiter: String, source: SourceInfo, cdrType: String) {
-    generateDataFrameFromListFile(source.name, configFile, listFileLocation, schemaLocation, delimiter, cdrType, true)
+//    generateDataFrameFromListFile(source.name, configFile, listFileLocation, schemaLocation, delimiter, cdrType, true)
   }
   
   //csv location
   def registerAllTables(CSVLocation: String, schemaLocation: String, source: SourceInfo) {
-    generateDataFrameFromCSV(CSVLocation, schemaLocation, ",").registerTempTable(source.name)
+//    generateDataFrameFromCSV(CSVLocation, schemaLocation, ",").registerTempTable(source.name)
   }
   
   def registerAllTables(configFile: ConfigFileV3, sequenceLocation: String, schemaLocation: String, source: SourceInfo, delimiter: String){
-    val tableName = source.name
-    generateDataFrameFromSequenceFile(tableName, configFile, List(sequenceLocation),delimiter, schemaLocation, true).registerTempTable(tableName)
+//    val tableName = source.name
+//    generateDataFrameFromSequenceFile(tableName, configFile, List(sequenceLocation),delimiter, schemaLocation, true).registerTempTable(tableName)
   }
   
   
@@ -165,8 +165,8 @@ object DataFrameHelper {
     .getHiveContext.sql(configFile.selectQuery()).repartition(DataManipulator.getTotalCoresTask()).write.mode("append").parquet(fileName)
   }
   
-  def readListFile(loc: String, cdrType: String):List[String] = {
-    val returned = ContextHelper.getSparkContext().textFile(loc).collect().toList.filter(seqFileLoc => DataManipulator.chosenCdr(cdrType, seqFileLoc).equals(true))
+  def readListFile(loc: String):List[String] = {
+    val returned = ContextHelper.getSparkContext().textFile(loc).collect().toList
     returned
   }
   
@@ -196,19 +196,33 @@ object DataFrameHelper {
    ContextHelper.getSparkContext.parallelize(rowList, DataManipulator.getTotalCoresTask() * 2)
   }
   
-  def generateDataFrameFromListFile(tableName: String, configFile: ConfigFileV3, listFile: String, schemaLoc: String, delimiter: String, cdrType: String, isCached: Boolean){
-    val filteredSequences = readListFile(listFile, cdrType)
-    generateDataFrameFromSequenceFile(tableName, configFile, filteredSequences, delimiter, schemaLoc, isCached)
-    .repartition(DataManipulator.getTotalCoresTask * 2)
-    .registerTempTable(tableName)
+  def generateDataFrameFromListFileSequence(configFile: ConfigFileV3, source: SourceInfo){
+    val listFile = source.source
+    val tblName = source.name
+    val seqFiles = readListFile(listFile)
+    val fileType = source.fileType
+    generateDataFrameFromSequenceFile(configFile, seqFiles, source)
+    .registerTempTable(tblName)
   }
   
-  def generateDataFrameFromSequenceFile(tableName: String, configFile: ConfigFileV3, listLoc: List[String], delimiter: String, schemaLoc: String, isCached: Boolean): DataFrame = {
-    val schema = generateSchemaFromAvro(schemaLoc)
-    val location = configFile.envLocation.concat("/" + ContextHelper.getSparkContext().applicationId).concat("_").concat(tableName)
-    ContextHelper.getHiveContext.saveTemporaryCSV(listLoc, location)
-    readCSVFileWithCustomSchema(location, schema, delimiter, isCached)
-//    ContextHelper.getHiveContext.createDataFrameFromList(listLoc, schema, isCached)
+  
+  def generateDataFrameFromSequenceFile(configFile: ConfigFileV3, seqFiles: List[String], source: SourceInfo): DataFrame = {
+    val schemaLoc = source.metadata
+    val delimiter = source.fileDelimiter
+    val isCached = source.cached
+    val tblName = source.name
+    val partitionSize = source.partitionSize
+    
+    val fileType = source.fileType
+    val location = configFile.envLocation.concat("/" + ContextHelper.getSparkContext().applicationId).concat("_").concat(tblName)
+    if(fileType.equalsIgnoreCase("csv")){
+      val schema = generateSchemaFromAvro(schemaLoc)
+      ContextHelper.getHiveContext.saveTemporaryCSV(seqFiles, location)
+      readCSVFileWithCustomSchema(location, schema, delimiter, isCached)
+    }
+    else{
+      ContextHelper.getHiveContext.createDataFrameFromListFileParquet(source, seqFiles)
+    }
   }
   
   def generateDataFrameFromSequence(schema: StructType, rdd: RDD[Row], isCached: Boolean): DataFrame = {
